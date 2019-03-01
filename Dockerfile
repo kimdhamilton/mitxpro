@@ -1,4 +1,5 @@
-FROM python:3.6.4
+##### Base image
+FROM python:3.6.4 AS base
 LABEL maintainer "ODL DevOps <mitx-devops@mit.edu>"
 
 # Add package files, install updated node and pip
@@ -33,6 +34,10 @@ WORKDIR /src
 RUN chown -R mitodl:mitodl /src
 
 RUN apt-get clean && apt-get purge
+
+
+##### Web app image
+FROM base AS webapp
 USER mitodl
 
 # Set pip cache folder, as it is breaking pip when it is on a shared volume
@@ -41,3 +46,11 @@ ENV XDG_CACHE_HOME /tmp/.cache
 EXPOSE 8053
 ENV PORT 8053
 CMD uwsgi uwsgi.ini
+
+
+##### Notebook image layered on top of base image
+FROM base AS notebook
+WORKDIR /tmp
+RUN pip install --force-reinstall jupyter
+WORKDIR /src
+USER mitodl
