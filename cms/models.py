@@ -68,7 +68,7 @@ class ProgramPage(ProductPage):
         on_delete=models.SET_NULL,
         help_text="The program for this page",
     )
-    content_panels = ProductPage.content_panels + [FieldPanel("program")]
+    content_panels = [FieldPanel("program")] + ProductPage.content_panels
 
 
 class CoursePage(ProductPage):
@@ -84,4 +84,4 @@ class CoursePage(ProductPage):
         on_delete=models.SET_NULL,
         help_text="The course for this page",
     )
-    content_panels = ProductPage.content_panels + [FieldPanel("course")]
+    content_panels = [FieldPanel("course")] + ProductPage.content_panels

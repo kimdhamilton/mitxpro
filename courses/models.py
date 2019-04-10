@@ -11,12 +11,41 @@ from mitxpro.utils import now_in_utc, first_matching_item
 log = logging.getLogger(__name__)
 
 
+class ProgramQuerySet(models.QuerySet):  # pylint: disable=missing-docstring
+    def live(self):
+        """Applies a filter for Programs with live=True"""
+        return self.filter(live=True)
+
+
+class ProgramManager(models.Manager):  # pylint: disable=missing-docstring
+    def get_queryset(self):
+        return ProgramQuerySet(self.model, using=self._db)
+
+    def live(self):
+        """Returns a queryset of Programs with live=True"""
+        return self.get_queryset().live()
+
+
+class CourseQuerySet(models.QuerySet):  # pylint: disable=missing-docstring
+    def live(self):
+        """Applies a filter for Courses with live=True"""
+        return self.filter(live=True)
+
+
+class CourseManager(models.Manager):  # pylint: disable=missing-docstring
+    def get_queryset(self):
+        return CourseQuerySet(self.model, using=self._db)
+
+    def live(self):
+        """Returns a queryset of Courses with live=True"""
+        return self.get_queryset().live()
+
+
 class Program(TimestampedModel):
     """Model for a course program"""
 
+    objects = ProgramManager()
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    thumbnail = models.ImageField(null=True, blank=True)
     readable_id = models.CharField(null=True, max_length=255)
     live = models.BooleanField(default=False)
 
@@ -27,13 +56,12 @@ class Program(TimestampedModel):
 class Course(TimestampedModel):
     """Model for a course"""
 
+    objects = CourseManager()
     program = models.ForeignKey(
         Program, on_delete=models.CASCADE, null=True, blank=True
     )
     position_in_program = models.PositiveSmallIntegerField(null=True, blank=True)
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    thumbnail = models.ImageField(null=True, blank=True)
     readable_id = models.CharField(null=True, max_length=255)
     live = models.BooleanField(default=False)
 

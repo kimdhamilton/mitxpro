@@ -17,14 +17,14 @@ class ProgramViewSet(viewsets.ModelViewSet):
     """API view set for Programs"""
 
     serializer_class = ProgramSerializer
-    queryset = Program.objects.all()
+    queryset = Program.objects.select_related("programpage").all()
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     """API view set for Courses"""
 
     serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+    queryset = Course.objects.select_related("coursepage").all()
 
 
 class CourseRunViewSet(viewsets.ModelViewSet):
@@ -40,8 +40,8 @@ class CourseCatalogView(ListView):
     template_name = "catalog.html"
 
     def get_queryset(self):
-        programs_qset = Program.objects.filter(live=True)
-        courses_qset = Course.objects.filter(live=True).order_by("id")
+        programs_qset = Program.objects.select_related("programpage").live()
+        courses_qset = Course.objects.select_related("coursepage").live().order_by("id")
         return {"programs": programs_qset, "courses": courses_qset}
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -50,8 +50,8 @@ class CourseCatalogView(ListView):
         return {
             **base_context_data,
             **get_js_settings_context(self.request),
-            "programs": object_list["programs"],
-            "courses": object_list["courses"],
+            "programs": ProgramSerializer(object_list["programs"], many=True).data,
+            "courses": CourseSerializer(object_list["courses"], many=True).data,
             "default_image_path": "images/mit-dome.png",
         }
 
