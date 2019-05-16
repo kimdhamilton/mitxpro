@@ -1,8 +1,19 @@
 <div class="site-wide-notifications">
   {% for notification in request.session.notifications %}
-  <div class="alert">
-    <a href="#" class="close-alert"></a>
-    {{ notification }}
-  </div>
+    <div
+        class="toast border-0 rounded-0 mw-100"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-animation="true"
+        data-autohide="false"
+    >
+      <div class="toast-header border-0">
+        <strong class="mr-auto">{{ notification }}</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
   {% endfor %}
 </div>

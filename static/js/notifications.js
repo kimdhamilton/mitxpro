@@ -2,8 +2,5 @@
 /*eslint semi: ["error", "always"]*/
 
 $(document).ready(function() {
-  $(".site-wide-notifications").on("click", ".close-alert", function(e) {
-    e.preventDefault();
-  this.closest('.alert').remove();
-  });
-});
+  $(".site-wide-notifications .toast").toast("show");
+})
