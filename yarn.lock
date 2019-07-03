@@ -7747,6 +7747,11 @@ redux-query@^2.3.1:
     prop-types "^15.5.6"
     superagent "^3.5.1"
 
+redux-sessionstorage@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/redux-sessionstorage/-/redux-sessionstorage-0.4.0.tgz#06a8fd646c703ad610ffcff1fcdffcf1e99a1fcd"
+  integrity sha1-Bqj9ZGxwOtYQ/8/x/N/88emaH80=
+
 redux-thunk@^2.0.1:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"

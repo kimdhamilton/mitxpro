@@ -121,6 +121,13 @@ export const objectToFormData = (object: Object) => {
   return formData
 }
 
+export const pickPaths = R.curry((paths, obj) =>
+  R.compose(
+    R.reduce((acc, [path, value]) => R.assocPath(path, value, acc), {}),
+    R.map(path => [path, R.path(path, obj)])
+  )(paths)
+)
+
 export const assertRaises = async (
   asyncFunc: Function,
   expectedMessage: string

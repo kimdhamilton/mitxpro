@@ -23,7 +23,8 @@ import {
   getMaxDate,
   newSetWith,
   newSetWithout,
-  timeoutPromise
+  timeoutPromise,
+  pickPaths
 } from "./util"
 import { makeUserEnrollments } from "../factories/course"
 
@@ -157,6 +158,36 @@ describe("utility functions", () => {
       ].forEach(([inputArr, expectedStr]) => {
         assert.deepEqual(spaceSeparated(inputArr), expectedStr)
       })
+    })
+  })
+
+  describe("pickPaths", () => {
+    it("picks a list of paths", () => {
+      const picker = pickPaths([["a", "b", "c"], ["a", "e"], ["f"]])
+      const source = {
+        a: {
+          b: {
+            c: 5
+          },
+          d: 4,
+          e: {
+            g: 6
+          }
+        },
+        f: 5
+      }
+      const expected = {
+        a: {
+          b: {
+            c: 5
+          },
+          e: {
+            g: 6
+          }
+        },
+        f: 5
+      }
+      assert.deepEqual(picker(source), expected)
     })
   })
 

@@ -97,3 +97,4 @@ export const EMPLOYMENT_LEVEL = [
 
 export const ALERT_TYPE_TEXT = "text"
 export const ALERT_TYPE_UNUSED_COUPON = "unused-coupon"
+export const ALERT_TYPE_REGISTRATION_SUCCESS = "registration-success"

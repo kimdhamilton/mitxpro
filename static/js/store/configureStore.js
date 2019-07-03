@@ -1,34 +1,44 @@
 /* global require:false, module:false */
-import { prop } from "ramda"
-import { compose, createStore, applyMiddleware } from "redux"
+import { prop, compose, map, split } from "ramda"
+import { createStore, applyMiddleware } from "redux"
 import { createLogger } from "redux-logger"
 import { queryMiddlewareAdvanced } from "redux-query/advanced"
+import persistState from "redux-sessionstorage"
+import rootReducer from "../reducers"
 
 import { makeRequest } from "./network_interface"
-import rootReducer from "../reducers"
+import { pickPaths } from "../lib/util"
+
+const isDev = process.env.NODE_ENV !== "production" && !global.TESTING
+
+const sessionStorageEnhancer = persistState(["ui.userNotifications"], {
+  slicer: compose(
+    pickPaths,
+    map(split("."))
+  )
+})
 
 // Setup middleware
 export default function configureStore(initialState: Object) {
-  const COMMON_MIDDLEWARE = [
+  const middlewares = [
     queryMiddlewareAdvanced(makeRequest)(prop("queries"), prop("entities"))
   ]
 
-  // Store factory configuration
-  let createStoreWithMiddleware
-  if (process.env.NODE_ENV !== "production" && !global.TESTING) {
-    createStoreWithMiddleware = compose(
-      applyMiddleware(...COMMON_MIDDLEWARE, createLogger()),
-      window.__REDUX_DEVTOOLS_EXTENSION__
-        ? window.__REDUX_DEVTOOLS_EXTENSION__()
-        : f => f
-    )(createStore)
-  } else {
-    createStoreWithMiddleware = compose(applyMiddleware(...COMMON_MIDDLEWARE))(
-      createStore
-    )
+  if (isDev) {
+    middlewares.push(createLogger())
   }
 
-  const store = createStoreWithMiddleware(rootReducer, initialState)
+  const middlewareEnhancer = applyMiddleware(...middlewares)
+
+  const enhancers = [middlewareEnhancer, sessionStorageEnhancer]
+
+  if (isDev && window.__REDUX_DEVTOOLS_EXTENSION__) {
+    enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__())
+  }
+
+  const composedEnhancers = compose(...enhancers)
+
+  const store = createStore(rootReducer, initialState, composedEnhancers)
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers

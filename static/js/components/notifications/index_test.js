@@ -3,7 +3,11 @@ import React from "react"
 import { assert } from "chai"
 import { shallow } from "enzyme"
 
-import { TextNotification, UnusedCouponNotification } from "."
+import {
+  TextNotification,
+  UnusedCouponNotification,
+  RegistrationSuccessNotification
+} from "."
 import { routes } from "../../lib/urls"
 import IntegrationTestHelper from "../../util/integration_test_helper"
 
@@ -44,5 +48,10 @@ describe("Notification component", () => {
       onClick:   dismissStub,
       className: "alert-link"
     })
+  })
+
+  it("RegistrationSuccessNotification", () => {
+    const wrapper = shallow(<RegistrationSuccessNotification />)
+    assert.equal(wrapper.find("a").prop("href"), routes.catalog)
   })
 })
