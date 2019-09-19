@@ -62,20 +62,17 @@ describe("LoginForgotPasswordPage", () => {
 
     assert.lengthOf(helper.browserHistory, 2)
     assert.include(helper.browserHistory.location, {
-      pathname: routes.login.begin,
+      pathname: routes.root,
       search:   ""
     })
     sinon.assert.calledWith(setSubmittingStub, false)
 
-    const { ui } = store.getState()
-
-    assert.deepEqual(ui.userNotifications, {
-      "forgot-password-sent": {
-        type:  ALERT_TYPE_TEXT,
-        props: {
-          text: `If an account with the email "${email}" exists, an email has been sent with a password reset link.`
-        }
-      }
-    })
+    // after submit it remain on the forgot password page
+    // and there will no more email form
+    assert.isNotTrue(inner.find("EmailForm").exists());
+    // it also contain to reset your password link
+    assert.ok(inner.find("Link[to='/signin/forgot-password']").exists());
+    // customer support link exists
+    assert.ok(inner.find("a[href='mailto:xpro@mit.edu']").exists())
   })
-})
+});
