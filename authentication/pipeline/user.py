@@ -95,7 +95,9 @@ def create_user_via_email(
         raise RequirePasswordAndPersonalInfoException(backend, current_partial)
     if len(data.get("name", 0)) < NAME_MIN_LENGTH:
         raise RequirePasswordAndPersonalInfoException(
-            backend, current_partial, errors=["Full name must be at least 2 characters long."]
+            backend,
+            current_partial,
+            errors=["Full name must be at least 2 characters long."],
         )
 
     data["email"] = kwargs.get("email", kwargs.get("details", {}).get("email"))
