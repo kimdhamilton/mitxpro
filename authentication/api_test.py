@@ -6,7 +6,7 @@ from authentication import api
 from users.factories import UserFactory
 from users.serializers import UserSerializer
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db]
 
 
 def test_create_user_session(user):
