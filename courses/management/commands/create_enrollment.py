@@ -4,8 +4,9 @@ from django.contrib.auth import get_user_model
 
 from courses.api import create_run_enrollments
 from courses.models import CourseRun
-from ecommerce.api import best_coupon_for_product
-from ecommerce.models import Coupon, Product
+from ecommerce.api import best_coupon_for_product, create_unfulfilled_order
+from ecommerce.models import Coupon, Product, Basket
+from ecommerce.serializers import BasketSerializer
 from users.api import fetch_user
 
 User = get_user_model()
@@ -72,16 +73,43 @@ class Command(BaseCommand):
                 }
             )
 
-        successful_enrollments, edx_request_success = create_run_enrollments(
-            user, [run]
-        )
-        if not successful_enrollments:
-            raise CommandError("Failed to create the enrollment record")
+        basket, _ = Basket.objects.get_or_create(user=user)
+        serializer = BasketSerializer(basket)
+        context = [
+            dict(
+                "items": {"product_id": options["run"]},
+                "coupons": {"code": options["code"]}
+            )
+        ]
+        try:
+            items = serializer.validate_items(context["items"])
+            basket = serializer.update(basket, context)
+        except ValidationError as e:
+            raise CommandError(e)
+        
+        # make order
+        order = create_unfulfilled_order(user)
+        # fulfill order
+        order.status = Order.FULFILLED
+        order.save()
+        sync_hubspot_deal(order)
+
+        complete_order(order)
+        order.save_and_log(request.user)
+
+        if settings.ENABLE_ORDER_RECEIPTS:
+            send_ecommerce_order_receipt(order)
+
+        # successful_enrollments, edx_request_success = create_run_enrollments(
+        #     user, [run]
+        # )
+        # if not successful_enrollments:
+        #     raise CommandError("Failed to create the enrollment record")
 
         self.stdout.write(
             self.style.SUCCESS(
-                "Enrollment created for user {} in {} (edX enrollment success: {})".format(
-                    user, options["run"], edx_request_success
+                "Enrollment created for user {} in {}".format(
+                    user, options["run"]
                 )
             )
         )
