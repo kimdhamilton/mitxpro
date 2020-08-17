@@ -187,26 +187,50 @@ export type Product = {
 export type ProgramRunDetail = {
   id: number,
   run_tag: string,
-  start_date: string,
-  end_date: string
-}
-
-export type SimpleProductDetail = Product & {
-  latest_version: BaseProductVersion,
-  parent: {
-    id?: number,
-    title?: string
-  },
   start_date: ?string,
   end_date: ?string
+}
+
+export type CourseRunContentObject = {|
+  id: string,
+  title: string,
+  readable_id: string,
+  start_date: ?string,
+  end_date: ?string,
+  course: {
+    id: number,
+    title: string
+  }
+|}
+
+export type ProgramContentObject = {|
+  id: string,
+  title: string,
+  readable_id: string
+|}
+
+export type BaseProduct = {
+  id: number,
+  title: string,
+  visible_in_bulk_form: boolean,
+  latest_version: ProductVersion
+}
+
+export type CourseRunProduct = BaseProduct & {
+  product_type: "courserun",
+  content_object: CourseRunContentObject
 }
 
 export type ProductDetail = Product & {
   latest_version: ProductVersion
 }
 
+export type Product = CourseRunProduct | ProgramProduct
+
+export type ProductType = PRODUCT_TYPE_COURSERUN | PRODUCT_TYPE_PROGRAM
+
 export type ProductMap = {
-  [PRODUCT_TYPE_COURSERUN | PRODUCT_TYPE_PROGRAM]: {
+  [ProductType]: {
     (string): [BaseCourseRun | Program]
   }
 }

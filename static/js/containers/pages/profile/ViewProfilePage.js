@@ -2,7 +2,7 @@
 import React from "react"
 import DocumentTitle from "react-document-title"
 import { VIEW_PROFILE_PAGE_TITLE } from "../../../constants"
-import { connectRequest } from "redux-query"
+import { connectRequest } from "redux-query-react"
 import { compose } from "redux"
 import { connect } from "react-redux"
 import type { RouterHistory } from "react-router"

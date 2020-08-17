@@ -3,7 +3,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { compose } from "redux"
-import { connectRequest } from "redux-query"
+import { connectRequest } from "redux-query-react"
 import qs from "query-string"
 import moment from "moment"
 import Decimal from "decimal.js-light"

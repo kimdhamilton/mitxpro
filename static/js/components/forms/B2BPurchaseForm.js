@@ -246,7 +246,9 @@ class B2BPurchaseForm extends React.Component<Props> {
         validate={validate}
         render={this.renderForm}
         ref={this.formikRef}
-      />
+      >
+        {props => this.renderForm(props)}
+      </Formik>
     )
   }
 }

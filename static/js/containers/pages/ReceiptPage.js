@@ -6,7 +6,7 @@ import DocumentTitle from "react-document-title"
 import { RECEIPT_PAGE_TITLE } from "../../constants"
 import { compose } from "redux"
 import { connect } from "react-redux"
-import { connectRequest } from "redux-query"
+import { connectRequest } from "redux-query-react"
 import moment from "moment"
 import { pathOr } from "ramda"
 

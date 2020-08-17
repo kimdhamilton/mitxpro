@@ -162,7 +162,7 @@ class ProgramRunsViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         return ProgramRun.objects.filter(
             program__products=self.kwargs["program_product_id"]
-        )
+        ).distinct()
 
 
 class CompanyViewSet(ReadOnlyModelViewSet):

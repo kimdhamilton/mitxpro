@@ -34,7 +34,8 @@ const RegisterDetailsForm = ({ onSubmit, countries }: Props) => (
     onSubmit={onSubmit}
     validationSchema={legalAddressValidation.concat(passwordValidation)}
     initialValues={INITIAL_VALUES}
-    render={({ isSubmitting, setFieldValue, setFieldTouched, values }) => (
+  >
+    {({ isSubmitting, setFieldValue, setFieldTouched, values }) => (
       <Form>
         <LegalAddressFields
           countries={countries}
@@ -54,7 +55,7 @@ const RegisterDetailsForm = ({ onSubmit, countries }: Props) => (
         </div>
       </Form>
     )}
-  />
+  </Formik>
 )
 
 export default RegisterDetailsForm

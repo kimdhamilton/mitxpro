@@ -169,7 +169,8 @@ export class BulkEnrollmentForm extends React.Component<
           product_id:        initialProductId,
           coupon_payment_id: initialCouponPaymentId
         }}
-        render={({ values, isSubmitting, errors, touched, setFieldValue }) => (
+      >
+        {({ values, isSubmitting, errors, touched, setFieldValue }) => (
           <Form className="bulk-enrollment-form">
             <section>
               <label htmlFor="users_file">User CSV: </label>
@@ -270,7 +271,7 @@ export class BulkEnrollmentForm extends React.Component<
             )}
           </Form>
         )}
-      />
+      </Formik>
     )
   }
 }

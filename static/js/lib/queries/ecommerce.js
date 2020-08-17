@@ -1,7 +1,11 @@
 // @flow
-import { pathOr, objOf, nthArg } from "ramda"
+import { pathOr, objOf, nthArg, merge, when, evolve, propEq } from "ramda"
+import { createSelector } from "reselect"
+import moment from "moment"
 
 import { getCookie } from "../api"
+import { isCourseRunProduct } from "../ecommerce"
+import { parseDateString } from "../util"
 
 import type {
   B2BOrderStatus,
@@ -25,6 +29,11 @@ const DEFAULT_POST_OPTIONS = {
     "X-CSRFTOKEN": getCookie("csrftoken")
   }
 }
+
+const productProgramRunsSelector = pathOr({}, [
+  "entities",
+  "productProgramRuns"
+])
 
 export default {
   checkoutMutation: () => ({
@@ -81,9 +90,9 @@ export default {
       nested: false,
       ...(productType ? { type: productType } : {})
     },
-    transform: (json: Array<SimpleProductDetail>) => ({
-      products: json
-    }),
+    transform: (products: Array<Product>) => {
+      products
+    },
     update: {
       products: nextState
     }
@@ -170,15 +179,21 @@ export default {
         next
     }
   }),
-  programRunsSelector: pathOr(null, ["entities", "programRuns"]),
-  programRunsQuery:    (productId: string) => ({
-    queryKey:  "programRuns",
+  productProgramRunsSelector,
+  productProgramRunsByIdSelector: createSelector(
+    productProgramRunsSelector,
+    (products, productId) => products[productId]
+  ),
+  productProgramRunsQuery: (productId: string) => ({
+    queryKey:  "productProgramRuns",
     url:       `/api/products/${productId}/runs/`,
     transform: (json: [ProgramRunDetail]) => ({
-      programRuns: json
+      productProgramRuns: {
+        [productId]: json
+      }
     }),
     update: {
-      programRuns: (prev: [ProgramRunDetail], next: [ProgramRunDetail]) => next
+      productProgramRuns: merge
     },
     force: true
   })

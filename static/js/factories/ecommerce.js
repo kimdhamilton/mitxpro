@@ -18,9 +18,12 @@ import type {
   ProductDetail,
   B2BOrderStatus,
   B2BCouponStatusResponse,
-  SimpleProductDetail,
-  BaseProductVersion,
-  ProgramRunDetail
+  ProgramRunDetail,
+  ProgramContentObject,
+  ProgramProduct,
+  CourseRunContentObject,
+  CourseRunProduct,
+  ProductVersion
 } from "../flow/ecommerceTypes"
 import type { BaseCourseRun, Program } from "../flow/courseTypes"
 import {
@@ -106,25 +109,33 @@ export const makeBasketResponse = (itemType: ?string): BasketResponse => {
   }
 }
 
-export const makeSimpleProductVersion = (
-  productType: string = PRODUCT_TYPE_COURSERUN,
-  readableId: string = casual.text
-): BaseProductVersion => ({
-  // $FlowFixMe
-  id:            genProductId.next().value,
-  type:          productType,
-  price:         String(casual.double(0, 100)),
-  content_title: casual.text,
-  readable_id:   readableId,
-  object_id:     casual.random,
-  // $FlowFixMe
-  product_id:    genProductId.next().value
+export const makeProgramContentObject = (
+  readableId: string
+): ProgramContentObject => ({
+  // $FlowFixMe: flow doesn't understand generators well
+  id:          genProductContentObjectId.next().value,
+  readable_id: readableId,
+  title:       casual.word
 })
 
-export const makeSimpleProduct = (
-  productType: string = PRODUCT_TYPE_COURSERUN,
+export const makeCourseRunContentObject = (
+  readableId: string
+): CourseRunContentObject => {
+  const course = makeCourse()
+  return {
+    // $FlowFixMe: flow doesn't understand generators well
+    id:          genProductContentObjectId.next().value,
+    title:       casual.word,
+    readable_id: readableId,
+    start_date:  casual.moment.format(),
+    end_date:    casual.moment.format(),
+    course:      { id: course.id, title: course.title }
+  }
+}
+
+export const makeCourseRunProduct = (
   readableId: string = casual.text
-): SimpleProductDetail => ({
+): CourseRunProduct => ({
   // $FlowFixMe
   id:                   genProductId.next().value,
   title:                casual.word,
@@ -142,10 +153,9 @@ export const makeSimpleProduct = (
   latest_version: makeSimpleProductVersion(productType, readableId)
 })
 
-export const makeProduct = (
-  productType: string = PRODUCT_TYPE_COURSERUN,
+export const makeProgramProduct = (
   readableId: string = casual.text
-): ProductDetail => ({
+): ProgramProduct => ({
   // $FlowFixMe
   id:                   genProductId.next().value,
   title:                casual.word,
@@ -176,9 +186,7 @@ export const makeCourseRunOrProgram = (
   return product
 }
 
-export const makeProgramRun = (
-  program: BaseProductVersion
-): ProgramRunDetail => ({
+export const makeProgramRun = (program: ProductVersion): ProgramRunDetail => ({
   // $FlowFixMe: flow doesn't understand generators well
   id:      genProductId.next().value,
   run_tag: `${program.readable_id}${ENROLLABLE_ITEM_ID_SEPARATOR}R${

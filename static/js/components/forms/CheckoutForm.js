@@ -411,7 +411,8 @@ export class CheckoutForm extends React.Component<OuterProps> {
           dataConsent: false
         }}
         validate={this.validate}
-        render={props => (
+      >
+        {props => (
           <InnerCheckoutForm
             {...props}
             basket={basket}
@@ -430,7 +431,7 @@ export class CheckoutForm extends React.Component<OuterProps> {
             }}
           />
         )}
-      />
+      </Formik>
     )
   }
 }

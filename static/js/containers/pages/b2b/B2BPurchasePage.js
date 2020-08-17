@@ -5,12 +5,8 @@ import { compose } from "redux"
 import { pathOr } from "ramda"
 import { createStructuredSelector } from "reselect"
 
-import {
-  connectRequest,
-  mutateAsync,
-  requestAsync,
-  updateEntities
-} from "redux-query"
+import { mutateAsync, requestAsync, updateEntities } from "redux-query"
+import { connectRequest } from "redux-query-react"
 
 import B2BPurchaseForm from "../../../components/forms/B2BPurchaseForm"
 

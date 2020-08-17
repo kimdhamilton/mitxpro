@@ -1,7 +1,6 @@
 // @flow
 import Decimal from "decimal.js-light"
-import * as R from "ramda"
-import { equals } from "ramda"
+import { equals, propEq } from "ramda"
 import moment from "moment"
 
 import type {
@@ -114,6 +113,8 @@ export const formatRunTitle = (run: ?CourseRun) =>
     : ""
 
 export const isPromo = equals(COUPON_TYPE_PROMO)
+export const isProgramProduct = propEq("product_type", PRODUCT_TYPE_PROGRAM)
+export const isCourseRunProduct = propEq("product_type", PRODUCT_TYPE_COURSERUN)
 
 export const findProductById = <T: ProductDetail | SimpleProductDetail>(
   products: Array<T>,
