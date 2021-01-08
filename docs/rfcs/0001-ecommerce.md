@@ -1,6 +1,17 @@
-## Title for RFC
-ecommerce in mitxpro
+---
+layout: default
+parent: RFCs
+nav_order: 1
+---
+## 0001: Ecommerce in MIT xPro
 
+{: .no_toc }
+
+## Table of Contents
+{: .no_toc .text-delta }
+
+- Table of Contents
+{:toc}
 
 #### Abstract
 
@@ -14,7 +25,7 @@ The only supported payment processor for MicroMasters is CyberSource.
 At the time MIT didn't support other payment processors
 like Stripe for example, and I believe that's still true today.
 
-edX has support for multiple payment processors, for example 
+edX has support for multiple payment processors, for example
 the [CyberSource payment processor backend](https://github.com/edx/ecommerce/blob/master/ecommerce/extensions/payment/processors/cybersource.py#L369).
 This adds some complexity since there are significant differences
 between how they interact with the web application's frontend and backend.
@@ -47,7 +58,7 @@ Whether or not we want to use django-oscar, we will need models like these (usin
  the user who is making the purchase.
  - `Line` for an item in an `Basket`
  - `Receipt` to store CyberSource post-back information. Foreign key to `Order`.
- - `Product` to represent a purchasable item. In MicroMasters we skip this and 
+ - `Product` to represent a purchasable item. In MicroMasters we skip this and
  instead set the course key in the `Line` directly but should have this object
  to provide future flexibility and to let us decouple the price and the course information.
  - `Coupon` to describe a coupon and how it can be used. This should have at least a field to store the coupon code
@@ -95,7 +106,7 @@ A future RFC will define the models and interface for adding purchase orders.
 
 #### Coupons
 
-edX overrides the django-oscar `Voucher` class to support coupons. They have several 
+edX overrides the django-oscar `Voucher` class to support coupons. They have several
 different variations of coupons, for example:
 
  - who can redeem: once by one user, once by many users, many times by many users
@@ -110,7 +121,7 @@ within edX.)
 
 In MicroMasters we had a custom implementation of coupons, working alongside a custom implementation of financial aid.
 The Django admin is used to create coupons and to record information about coupon invoices for bulk instances of
-coupons. 
+coupons.
 
 There are variations of coupons in MicroMasters:
 
@@ -138,7 +149,7 @@ purchase.
 We also may need to support automatic discounts in the future
 based on arbitrary criteria, to be defined. It would be ideal to support this use case using
 coupons, given to the user and used explicitly like other coupons.
- 
+
 #### Frontend/Backend work
 
 In MicroMasters, when the user clicks the button to submit the order, it creates an unfulfilled order on the backend

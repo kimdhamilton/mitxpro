@@ -1,4 +1,18 @@
-## Storing course data
+---
+layout: default
+parent: RFCs
+nav_order: 2
+---
+## 0002: Storing course data
+
+{: .no_toc }
+
+## Table of Contents
+{: .no_toc .text-delta }
+
+- Table of Contents
+{:toc}
+
 
 ### Abstract
 
@@ -17,8 +31,8 @@ Out of scope for this RFC:
 
 ### Models
 
-Since this app has very similar needs, `Program`, `Course`, and `CourseRun` 
-models will very closely mirror the [models in MicroMasters](https://github.com/mitodl/micromasters/blob/master/courses/models.py), 
+Since this app has very similar needs, `Program`, `Course`, and `CourseRun`
+models will very closely mirror the [models in MicroMasters](https://github.com/mitodl/micromasters/blob/master/courses/models.py),
 minus a few fields that are not relevant for this app.
 
 `Program`
@@ -60,21 +74,21 @@ Some things to debate/pay particular attention to:
     they currently exist.
 
 1. `CourseRun.courseware_url`
-    
+
     We need to be able to link directly to a course on its courseware
     platform. One option is to store the external id and, in our app logic,
     generate the link to the course based on that id and the platform it
     exists on (indicated by `source`). Another option is to simply store
     the external url alongside the external id. That involves some redundant
-    data (the URL will almost certainly contain the external id), but the 
-    external id is highly unlikely to change and we will gain some 
+    data (the URL will almost certainly contain the external id), but the
+    external id is highly unlikely to change and we will gain some
     flexibility, safety, and clarity by storing the URL separately. `CourseRun`s
     that exist on the legacy platform will have a null value for this column.
 
 1. The `live` flag
-    
-    This is being added because we will want to be able to author some 
-    information for programs/courses that don't yet exist on the courseware 
+
+    This is being added because we will want to be able to author some
+    information for programs/courses that don't yet exist on the courseware
     platform.
 
 ### Loading Course Data
@@ -87,12 +101,12 @@ models can be broken down into 2 parts:
 ##### 1) Loading legacy course data
 
 Still some decisions to be made here. There may be a separate RFC for this.
-  
+
 ##### 2) Updating course data from Open edX
 
 Once courses are being authored and managed in our own Open edX instance,
-we'll need to keep our own models synced. 
+we'll need to keep our own models synced.
 
 **Proposal:** An asynchronous task that fetches edX course data via API and
 updates/creates courses on our end (much like we do for enrollments/grades
-in MicroMasters). 
+in MicroMasters).

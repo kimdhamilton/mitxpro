@@ -104,3 +104,6 @@ celerybeat-schedule
 
 # Google API token file (for local testing)
 localdev/google.token
+
+# docs
+docs/_site/

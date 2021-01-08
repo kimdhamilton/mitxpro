@@ -1,0 +1,12 @@
+title: MIT xPro
+description: Documentation for the MIT xPro application.
+
+show_downloads: false
+google_analytics:
+
+remote_theme: pmarsceill/just-the-docs
+markdown: kramdown
+kramdown:
+  parse_block_html: true
+plugins:
+  - jekyll-feed

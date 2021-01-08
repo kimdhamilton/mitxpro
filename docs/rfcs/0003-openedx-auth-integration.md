@@ -1,4 +1,18 @@
-## Open edX Auth Integration
+---
+layout: default
+parent: RFCs
+nav_order: 3
+---
+## 0003: Open edX Auth Integration
+
+{: .no_toc }
+
+## Table of Contents
+{: .no_toc .text-delta }
+
+- Table of Contents
+{:toc}
+
 
 #### Abstract
 
