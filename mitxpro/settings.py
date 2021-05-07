@@ -706,6 +706,7 @@ AWS_SECRET_ACCESS_KEY = get_string(
 AWS_STORAGE_BUCKET_NAME = get_string(
     name="AWS_STORAGE_BUCKET_NAME", default=None, description="S3 Bucket name."
 )
+AWS_S3_FILE_OVERWRITE = get_bool("AWS_S3_FILE_OVERWRITE", False)
 AWS_QUERYSTRING_AUTH = get_bool(
     name="AWS_QUERYSTRING_AUTH",
     default=False,
